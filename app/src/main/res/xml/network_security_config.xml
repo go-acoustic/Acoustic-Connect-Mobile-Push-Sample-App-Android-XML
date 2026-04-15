@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Allows user-installed CA certificates (e.g. Proxyman) to be trusted for HTTPS inspection.
+    Demo app only — do NOT copy this config into production SDK builds.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <!-- Trust system CAs -->
+            <certificates src="system" />
+            <!-- Trust user-installed CAs (Proxyman, Charles, etc.) -->
+            <certificates src="user" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

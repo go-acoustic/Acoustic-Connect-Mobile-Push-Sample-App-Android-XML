@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Connect Application</string>
+    <string name="tab_notification">Notification</string>
+    <string name="tab_identity">Identity</string>
+    <string name="logo_description">Acoustic Connect Logo</string>
+    <string name="connect_demo">Connect Demo</string>
+    <string name="notification_authorization">Notification Authorization</string>
+    <string name="status_not_authorized">Status: Not Authorized</string>
+    <string name="status_authorized">Status: Authorized</string>
+    <string name="enable_push">Enable Push</string>
+    <string name="log_identity">Log Identity</string>
+    <string name="identifier_name">Identifier Name</string>
+    <string name="identifier_name_hint">e.g. Email</string>
+    <string name="identifier_value">Identifier Value</string>
+    <string name="identifier_value_hint">e.g. user@example.com</string>
+    <string name="send_identity_signal">Send Identity Signal</string>
+    <string name="recent">Recent</string>
+</resources>

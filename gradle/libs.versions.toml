@@ -1,0 +1,53 @@
+[versions]
+agp = "8.13.2"
+# Kotlin is pinned to 1.9.x for two reasons:
+#   1. Compose compiler extension 1.5.8 (composeOptions in app/build.gradle.kts) requires
+#      Kotlin < 2.0. Upgrading to Kotlin 2.0+ requires migrating to the standalone
+#      org.jetbrains.kotlin.plugin.compose plugin and a matching compiler extension.
+#   2. Huawei AGConnect plugin (agcp 1.9.1.304) is not yet compatible with Kotlin 2.0.
+kotlin = "1.9.22"
+coreKtx = "1.13.1"
+junit = "4.13.2"
+junitVersion = "1.1.5"
+espressoCore = "3.5.1"
+lifecycleRuntimeKtx = "2.7.0"
+googleServices = "4.4.2"
+firebaseBom = "33.7.0"
+agcp = "1.9.1.304"
+gradle = "8.13.1"
+androidxLib = "1.6.1"
+spotbugs = "5.0.14"
+navigationFragmentKtxVersion = "2.7.5"
+material = "1.12.0"
+constraintlayout = "2.1.4"
+navigationUiKtx = "2.7.7"
+connect = "11.0.5"
+tealeaf = "10.4.21"
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging-ktx" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+agcp = { module = "com.huawei.agconnect:agcp", version.ref = "agcp" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxLib" }
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
+androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtxVersion" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleRuntimeKtx" }
+connect = { module = "io.github.go-acoustic:connect", version.ref = "connect" }
+tealeaf = { module = "io.github.go-acoustic:tealeaf", version.ref = "tealeaf" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+spotbugs = { id = "com.github.spotbugs", version.ref = "spotbugs" }
+agconnect = { id = "com.huawei.agconnect", version.ref = "agcp" }
+

@@ -27,8 +27,9 @@ render.experimental.xml
 *.jks
 *.keystore
 
-# Google Services (e.g. APIs or Firebase)
+# Google and Huawei Services
 google-services.json
+agconnect-services.json
 
 # Android Profiling
 *.hprof
