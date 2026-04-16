@@ -147,6 +147,271 @@ ConnectPushConfig(
 
 ---
 
+## FCM-only setup (no Huawei HMS)
+
+If you do not need Huawei HMS and only want to use Firebase FCM, remove all Huawei dependencies and configuration. This avoids the Gradle error caused by a missing `agconnect-services.json`.
+
+### 1. Remove the Huawei plugin resolution and repository from `settings.gradle.kts`
+
+```kotlin
+pluginManagement {
+    // Remove the entire resolutionStrategy block below:
+    // resolutionStrategy {
+    //     eachPlugin {
+    //         if (requested.id.id == "com.huawei.agconnect") {
+    //             useModule("com.huawei.agconnect:agcp:${requested.version}")
+    //         }
+    //     }
+    // }
+    repositories {
+        google { ... }
+        mavenCentral()
+        gradlePluginPortal()
+        // maven { url = uri("https://developer.huawei.com/repo/") }  // <-- remove this line
+    }
+}
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://developer.huawei.com/repo/") } // <-- don't remove this line
+    }
+}
+```
+
+### 2. Remove the Huawei plugin declaration from `build.gradle.kts` (root)
+
+```kotlin
+plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.google.services) apply false
+    alias(libs.plugins.spotbugs) apply false
+    // alias(libs.plugins.agconnect) apply false  // <-- remove this line
+}
+```
+
+Also remove the Huawei `buildscript` block if present:
+
+```kotlin
+// Remove the block below entirely:
+// buildscript {
+//     repositories {
+//         maven { url = uri("https://developer.huawei.com/repo/") }
+//     }
+//     dependencies {
+//         classpath(libs.agcp)
+//     }
+// }
+```
+
+### 3. Remove the Huawei AGConnect plugin from `app/build.gradle.kts`
+
+```kotlin
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.google.services)
+    // id("com.huawei.agconnect")  // <-- remove this line
+}
+```
+
+### 4. Remove HMS transitive dependencies from `libs.connect`
+
+In `app/build.gradle.kts`, add an `exclude` on `libs.connect` to drop the HMS transitive dependency:
+
+```kotlin
+dependencies {
+    // Keep Firebase dependencies:
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
+    implementation(libs.firebase.analytics)
+}
+```
+
+### 5. Remove `agconnect-services.json`
+
+The `agconnect-services.json` file is not required when HMS is removed. You can delete it from `app/` or leave it in place — it will be ignored.
+
+### 6. Force FCM provider
+
+With HMS removed, set `strictProvider` to `MobileServiceType.FCM` so the SDK does not attempt HMS initialisation:
+
+```kotlin
+ConnectPushConfig(
+    application = application,
+    iconRes = R.drawable.ic_notification,
+    strictProvider = MobileServiceType.FCM,
+    onTokenReady = { token -> ... },
+    onFailure = { exception -> ... },
+    onPermissionResult = { isGranted -> ... },
+)
+```
+
+### 7. Ensure `google-services.json` is in place
+
+Place your `google-services.json` in the `app/` directory. Obtain it from Firebase Console → Project settings → Your apps.
+
+> After these changes the project builds and runs without `agconnect-services.json`. Only devices with Google Play Services will receive push notifications.
+
+---
+
+## HMS-only setup (no Firebase)
+
+If you do not have a Firebase project and do not need FCM, you can remove all Firebase dependencies and run with Huawei HMS only. This avoids the Gradle build error caused by a missing `google-services.json`.
+
+### 1. Remove the Google Services plugin
+
+**`build.gradle.kts` (root)**
+
+```kotlin
+plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    // alias(libs.plugins.google.services) apply false  // <-- remove this line
+    alias(libs.plugins.spotbugs) apply false
+    alias(libs.plugins.agconnect) apply false
+}
+```
+
+Also remove the `google()` / `mavenCentral()` buildscript classpath for Google Services if present.
+
+**`app/build.gradle.kts`**
+
+```kotlin
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    // alias(libs.plugins.google.services)  // <-- remove this line
+    id("com.huawei.agconnect")
+}
+```
+
+### 2. Remove Firebase dependencies and exclude transitive ones
+
+In `app/build.gradle.kts`, remove the Firebase block and add `exclude` on `libs.connect` to prevent it from pulling Firebase in transitively:
+
+```kotlin
+dependencies {
+    // ...
+
+    implementation(libs.connect) {
+        exclude(group = "com.google.firebase")
+        exclude(group = "com.google.gms")
+    }
+
+    // Remove or comment out the three lines below:
+    // implementation(platform(libs.firebase.bom))
+    // implementation(libs.firebase.messaging)
+    // implementation(libs.firebase.analytics)
+}
+```
+
+### 3. Force HMS provider
+
+With Firebase removed, set `strictProvider` to `MobileServiceType.HMS` so the SDK does not attempt FCM initialisation:
+
+```kotlin
+ConnectPushConfig(
+    application = application,
+    iconRes = R.drawable.ic_notification,
+    strictProvider = MobileServiceType.HMS,
+    onTokenReady = { token -> ... },
+    onFailure = { exception -> ... },
+    onPermissionResult = { isGranted -> ... },
+)
+```
+
+### 4. Ensure `agconnect-services.json` is in place
+
+The `agconnect-services.json` file must be present in `app/` and must contain your app's SHA-256 fingerprint. See step 5 of [Getting started](#getting-started) for instructions on obtaining and registering the fingerprint.
+
+> After these changes the project builds and runs without `google-services.json`. Only Huawei devices or emulators with HMS Core will receive push notifications.
+
+---
+
+## Analytics-only setup (no push notifications)
+
+If you only need analytics capture and do not require push notifications at all, you can remove both FCM and HMS entirely. No `google-services.json` or `agconnect-services.json` is needed.
+
+### 1. Remove both push plugins from `settings.gradle.kts`
+
+```kotlin
+pluginManagement {
+    repositories {
+        google { ... }
+        mavenCentral()
+        gradlePluginPortal()
+        // maven { url = uri("https://developer.huawei.com/repo/") }  // <-- remove this line
+    }
+}
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+         maven { url = uri("https://developer.huawei.com/repo/") }  // <-- don't remove this line
+    }
+}
+```
+
+### 2. Remove both push plugins from `build.gradle.kts` (root)
+
+```kotlin
+plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    // alias(libs.plugins.google.services) apply false  // <-- remove this line
+    alias(libs.plugins.spotbugs) apply false
+    // alias(libs.plugins.agconnect) apply false        // <-- remove this line
+}
+
+// Remove the Huawei buildscript block entirely if present:
+// buildscript {
+//     repositories {
+//         maven { url = uri("https://developer.huawei.com/repo/") }
+//     }
+//     dependencies {
+//         classpath(libs.agcp)
+//     }
+// }
+```
+
+### 3. Remove both push plugins from `app/build.gradle.kts`
+
+```kotlin
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    // alias(libs.plugins.google.services)  // <-- remove this line
+    // id("com.huawei.agconnect")           // <-- remove this line
+}
+```
+
+### 4. Remove all Firebase and HMS dependencies
+
+```kotlin
+dependencies {
+    // ...
+
+    // Remove or comment out all Firebase and HMS dependencies:
+    // implementation(platform(libs.firebase.bom))
+    // implementation(libs.firebase.messaging)
+    // implementation(libs.firebase.analytics)
+}
+```
+
+### 5. Remove `ConnectPushConfig` initialisation from `MainActivity.kt`
+
+Do not call `Connect.enable(...)` with a `ConnectPushConfig`. Instead, initialise the SDK without push:
+
+```kotlin
+Connect.enable(application, appKey, collectorUrl)
+```
+
+> After these changes the project builds and runs without any push configuration files. The Connect SDK will capture analytics, user interactions, and screen visits as normal — push notifications will simply not be registered or delivered.
+
+---
+
 ## Analytics capture
 
 The SDK captures user interactions, screen visits, and screenshots automatically with no additional configuration. `ConnectLayoutConfig.json` controls per-screen capture rules:
