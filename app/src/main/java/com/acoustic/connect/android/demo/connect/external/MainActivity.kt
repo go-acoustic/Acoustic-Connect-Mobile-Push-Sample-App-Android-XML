@@ -18,6 +18,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.acoustic.connect.android.connectmod.Connect
 import com.acoustic.connect.android.connectmod.push.ConnectPushConfig
 import com.acoustic.connect.android.connectmod.push.constants.ConnectConstants
+import com.acoustic.connect.android.connectmod.push.core.MobileServiceType
 import com.acoustic.connect.android.demo.connect.external.notification.NotificationViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -31,9 +32,9 @@ class MainActivity : AppCompatActivity() {
 
         val prefs = getSharedPreferences(ConnectConstants.PREFS_NAME, MODE_PRIVATE)
         val appKey = prefs.getString(ConnectConstants.CLIENT_APP_ID_KEY, null)
-            ?: "68664f44ca814272b363bcb8ccd50805"
+            ?: "YOUR_APP_KEY"
         val collectorUrl = prefs.getString(ConnectConstants.COLLECTOR_URL_KEY, null)
-            ?: "https://collector-eaoc.qa.goacoustic.com/collector/collectorPost"
+            ?: "YOUR_COLLECTOR_URL"
 
         Connect.enable(
             appKey = appKey,
@@ -45,7 +46,10 @@ class MainActivity : AppCompatActivity() {
                 onFailure = { exception ->
                     Log.e(TAG, "ConnectPush initialization failed: ${exception.message}")
                 },
-                onTokenReady = { token -> viewModel.setToken(token) },
+                onTokenReady = {
+                    token -> viewModel.setToken(token)
+                    Log.d("Token", "Token: "+token.token)
+                },
                 onPermissionResult = { isGranted ->
                     viewModel.onNotificationPermissionResult(isGranted)
                 },

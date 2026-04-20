@@ -23,6 +23,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.acoustic.connect.android.connectmod.Connect
 import com.acoustic.connect.android.demo.connect.external.R
+import com.tl.uic.model.ScreenviewType
 import kotlinx.coroutines.launch
 
 class NotificationFragment : Fragment() {
@@ -39,6 +40,12 @@ class NotificationFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = inflater.inflate(R.layout.fragment_notification, container, false)
+
+    override fun onResume() {
+        super.onResume()
+        Connect.logScreenLayout(requireActivity(), SCREEN_NAME)
+        Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.LOAD)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,6 +64,10 @@ class NotificationFragment : Fragment() {
                 viewModel.uiState.collect { state -> render(state) }
             }
         }
+    }
+
+    companion object {
+        private const val SCREEN_NAME = "notification_screen"
     }
 
     private fun render(state: NotificationUiState) {

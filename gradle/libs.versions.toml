@@ -1,5 +1,5 @@
 [versions]
-agp = "8.13.2"
+agp = "8.13.1"
 # Kotlin is pinned to 1.9.x for two reasons:
 #   1. Compose compiler extension 1.5.8 (composeOptions in app/build.gradle.kts) requires
 #      Kotlin < 2.0. Upgrading to Kotlin 2.0+ requires migrating to the standalone
@@ -23,6 +23,7 @@ constraintlayout = "2.1.4"
 navigationUiKtx = "2.7.7"
 connect = "11.0.5"
 tealeaf = "10.4.21"
+eocore = "2.1.24-beta"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -43,6 +44,7 @@ androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleRuntimeKtx" }
 connect = { module = "io.github.go-acoustic:connect", version.ref = "connect" }
 tealeaf = { module = "io.github.go-acoustic:tealeaf", version.ref = "tealeaf" }
+eocore = { module = "io.github.go-acoustic:eocore", version.ref = "eocore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

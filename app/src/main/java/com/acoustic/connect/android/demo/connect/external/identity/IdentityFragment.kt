@@ -24,8 +24,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.acoustic.connect.android.connectmod.Connect
 import com.acoustic.connect.android.demo.connect.external.R
 import com.google.android.material.textfield.TextInputEditText
+import com.tl.uic.model.ScreenviewType
 import kotlinx.coroutines.launch
 
 class IdentityFragment : Fragment() {
@@ -46,6 +48,12 @@ class IdentityFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = inflater.inflate(R.layout.fragment_identity, container, false)
+
+    override fun onResume() {
+        super.onResume()
+        Connect.logScreenLayout(requireActivity(), SCREEN_NAME)
+        Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.LOAD)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -118,6 +126,10 @@ class IdentityFragment : Fragment() {
             cardHistory.visibility = View.VISIBLE
             rebuildHistory(state.history)
         }
+    }
+
+    companion object {
+        private const val SCREEN_NAME = "identity_screen"
     }
 
     private fun rebuildHistory(history: List<IdentityHistoryEntry>) {

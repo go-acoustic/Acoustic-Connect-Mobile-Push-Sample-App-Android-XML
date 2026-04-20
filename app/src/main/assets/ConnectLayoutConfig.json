@@ -28,87 +28,49 @@
         ]
       }
     },
-    "TestActivity": {
-      "ScreenChange": true,
-      "DisplayName": "My TestActivity",
-      "CaptureLayoutOn": 2,
-      "Masking": {
-        "HasMasking": true,
-        "HasCustomMask": true,
-        "Sensitive": {
-          "capitalCaseAlphabet": "X",
-          "number": "9",
-          "smallCaseAlphabet": "x",
-          "symbol": "#"
-        },
-        "MaskIdList": [
-        ],
-        "MaskAccessibilityLabelList": [
-          "privacyTest"
-        ]
-      }
-    },
-    "FirstFragment": {
-      "ScreenChange": true,
-      "DisplayName": "Landing Page Content",
-      "CaptureLayoutOn": 2,
-      "Masking": {
-        "HasMasking": true,
-        "HasCustomMask": true,
-        "Sensitive": {
-          "capitalCaseAlphabet": "X",
-          "number": "9",
-          "smallCaseAlphabet": "x",
-          "symbol": "#"
-        },
-        "MaskIdList": [
-        ],
-        "MaskAccessibilityLabelList": [
-          "privacyTest",
-          "title0TextView",
-          "Password = abcd123"
-        ]
-      }
-    },
     "MainActivity": {
       "ScreenChange": false,
       "DisplayName": "MainActivity",
       "CaptureLayoutOn": 0,
       "CaptureScreenshotOn": 0
     },
-    "NotLoggedFragment": {
-      "ScreenChange": false,
-      "DisplayName": "This fragment is not logged",
-      "CaptureLayoutDelay": 0,
-      "ScreenShot": false,
-      "NumberOfWebViews": 0,
-      "CaptureUserEvents": false,
-      "CaptureScreenVisits": false,
-      "CaptureLayoutOn": 0,
-      "CaptureScreenshotOn": 0
-    },
-    "first_screen": {
+    "notification_screen": {
       "ScreenChange": true,
-      "DisplayName": "Compose Home",
+      "DisplayName": "Notification",
+      "CaptureLayoutOn": 2,
+      "CaptureScreenshotOn": 2,
       "Masking": {
         "HasMasking": true,
-        "HasCustomMask": true,
+        "HasCustomMask": false,
         "Sensitive": {
           "capitalCaseAlphabet": "X",
           "number": "9",
           "smallCaseAlphabet": "x",
           "symbol": "#"
         },
-        "MaskAccessibilityLabelList": [
-          "mask_label"
-        ]
+        "MaskIdList": [],
+        "MaskValueList": [],
+        "MaskAccessibilityLabelList": []
       }
     },
-    "second_screen": {
-      "ScreenChange": true
-    },
-    "ComposeMainActivity": {
-      "ScreenChange": false
+    "identity_screen": {
+      "ScreenChange": true,
+      "DisplayName": "Identity",
+      "CaptureLayoutOn": 2,
+      "CaptureScreenshotOn": 2,
+      "Masking": {
+        "HasMasking": true,
+        "HasCustomMask": false,
+        "Sensitive": {
+          "capitalCaseAlphabet": "X",
+          "number": "9",
+          "smallCaseAlphabet": "x",
+          "symbol": "#"
+        },
+        "MaskIdList": [],
+        "MaskValueList": [],
+        "MaskAccessibilityLabelList": []
+      }
     }
   },
   "AppendMapIds": {

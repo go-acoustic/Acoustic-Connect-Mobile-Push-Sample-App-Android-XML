@@ -51,6 +51,7 @@ dependencies {
 
     implementation(libs.connect)
     implementation(libs.tealeaf)
+    implementation(libs.eocore)
 
     // Firebase Push Notifications
     implementation(platform(libs.firebase.bom))
