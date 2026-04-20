@@ -113,7 +113,7 @@ app/src/main/
 
   assets/
     ConnectBasicConfig.properties     # App key, collector URL, session and image settings
-    ConnectAdvancedConfig.json        # SDK feature flags and capture behaviour
+    ConnectAdvancedConfig.json        # Connect SDK feature flags and capture behaviour
     ConnectLayoutConfig.json          # Per-screen capture rules and masking
 
   AndroidManifest.xml                 # INTERNET, NETWORK_STATE, POST_NOTIFICATIONS
@@ -174,7 +174,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://developer.huawei.com/repo/") } // <-- don't remove this line
+        maven { url = uri("https://developer.huawei.com/repo/") }  // <-- don't remove this line
     }
 }
 ```
@@ -222,6 +222,14 @@ In `app/build.gradle.kts`, add an `exclude` on `libs.connect` to drop the HMS tr
 
 ```kotlin
 dependencies {
+    // ...
+
+    implementation(libs.connect) {
+        exclude(group = "com.huawei.hms")
+        exclude(group = "com.huawei.agconnect")
+        exclude(group = "com.goo")
+    }
+
     // Keep Firebase dependencies:
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging)
@@ -433,6 +441,7 @@ To customise capture for specific screens or add masking rules, edit `app/src/ma
 | `907135702: certificate fingerprint empty` | SHA-256 not registered in AppGallery Connect | Add fingerprint and re-download `agconnect-services.json` |
 | `Failed to resolve: com.google.firebase:firebase-messaging:null` | `google-services.json` missing | Add your `google-services.json` to the `app/` directory |
 | Push token never arrives | Notification permission denied (Android 13+) | Grant `POST_NOTIFICATIONS` permission when prompted |
+| Push sent from dashboard but app receives nothing | Identity signal not yet flushed to collector when push was dispatched | Wait for the identity signal collector POST to return HTTP 200 (visible in logcat) before sending the push — the SDK flushes on a ~30s interval; a network interruption can delay the flush further |
 
 ---
 
@@ -441,7 +450,8 @@ To customise capture for specific screens or add masking rules, edit `app/src/ma
 - Android Studio Hedgehog or later
 - Android 7.0 (API 24) minimum
 - Target SDK 36
-- Kotlin 1.9.x
+- Kotlin 1.9.x (pinned — Huawei AGConnect 1.9.1.304 is not compatible with Kotlin 2.0)
+- Acoustic Connect SDK `11.0.5`, Tealeaf `10.4.21`, EOCore `2.1.24-beta`
 - For FCM: device or emulator with Google Play Services
 - For HMS: Huawei device or emulator with HMS Core 5.0+
 
