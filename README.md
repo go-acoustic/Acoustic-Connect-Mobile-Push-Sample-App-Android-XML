@@ -216,19 +216,17 @@ plugins {
 }
 ```
 
-### 4. Remove HMS transitive dependencies from `libs.connect`
+### 4. Keep Acoustic SDK dependencies unchanged
 
-In `app/build.gradle.kts`, add an `exclude` on `libs.connect` to drop the HMS transitive dependency:
+No changes needed to `libs.connect` or the Acoustic SDK dependencies in `app/build.gradle.kts`.
 
 ```kotlin
 dependencies {
     // ...
 
-    implementation(libs.connect) {
-        exclude(group = "com.huawei.hms")
-        exclude(group = "com.huawei.agconnect")
-        exclude(group = "com.goo")
-    }
+    implementation(libs.connect)
+    implementation(libs.tealeaf)
+    implementation(libs.eocore)
 
     // Keep Firebase dependencies:
     implementation(platform(libs.firebase.bom))
