@@ -248,9 +248,9 @@ plugins {
 
 dependencies {
     implementation("io.github.go-acoustic:connect-push:<version>")
-    // connect-push transitively pulls connect, connect-push-fcm,
-    // connect-push-hms, Firebase Messaging, and HMS Push.
-    // No manual Firebase or HMS push declarations needed.
+    // connect-push pulls connect, connect-push-fcm, connect-push-hms and HMS Push transitively.
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-messaging-ktx")
 }
 ```
 
