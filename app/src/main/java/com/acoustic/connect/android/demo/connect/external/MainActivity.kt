@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         val collectorUrl = prefs.getString(ConnectConstants.COLLECTOR_URL_KEY, null)
             ?: "YOUR_COLLECTOR_URL"
 
+        Connect.init(application)
         Connect.enable(
             appKey = appKey,
             postMessageUrl = collectorUrl,
