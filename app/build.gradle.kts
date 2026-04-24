@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.acoustic.connect.android.demo.connect.external"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -49,14 +49,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 
-    implementation(libs.connect)
-    implementation(libs.tealeaf)
-    implementation(libs.eocore)
-
-    // Firebase Push Notifications
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.messaging)
-    implementation(libs.firebase.analytics)
+    implementation(libs.connect.push)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

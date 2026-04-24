@@ -446,7 +446,7 @@ To customise capture for specific screens or add masking rules, edit `app/src/ma
 ## Requirements
 
 - Android Studio Hedgehog or later
-- Android 7.0 (API 24) minimum
+- Android 8.0 (API 26) minimum
 - Target SDK 36
 - Kotlin 1.9.x (pinned — Huawei AGConnect 1.9.1.304 is not compatible with Kotlin 2.0)
 - Acoustic Connect SDK `11.0.5`, Tealeaf `10.4.21`, EOCore `2.1.24-beta`
