@@ -308,7 +308,19 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.google.services) apply false
-    // no agconnect plugin, no Huawei buildscript block
+    // no agconnect plugin
+}
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        // no maven { url = uri("https://developer.huawei.com/repo/") }
+    }
+    dependencies {
+        classpath(libs.gradle)
+        // no classpath(libs.agcp)
+    }
 }
 ```
 
@@ -484,7 +496,21 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     // no google-services, no agconnect
 }
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        // no maven { url = uri("https://developer.huawei.com/repo/") }
+    }
+    dependencies {
+        classpath(libs.gradle)
+        // no classpath(libs.agcp)
+    }
+}
 ```
+
+> No push plugins, so the Huawei Maven repo and `agcp` classpath are not needed.
 
 ### 3. `app/build.gradle.kts`
 
