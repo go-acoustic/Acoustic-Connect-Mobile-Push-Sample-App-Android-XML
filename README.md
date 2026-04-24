@@ -336,9 +336,11 @@ plugins {
 
 dependencies {
     implementation("io.github.go-acoustic:connect-push-fcm:<version>")
-    // connect-push-fcm transitively pulls connect and Firebase Messaging.
-    // Add firebase-analytics only if you want Analytics:
-    // implementation(libs.firebase.analytics)
+    
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-messaging-ktx")
+    // Optional — add only if you want Firebase Analytics:
+    // implementation("com.google.firebase:firebase-analytics-ktx")
 }
 ```
 
