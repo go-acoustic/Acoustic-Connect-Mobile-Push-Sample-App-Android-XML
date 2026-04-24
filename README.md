@@ -463,8 +463,6 @@ ConnectPushConfig(
 )
 ```
 
-> Only Huawei devices or emulators with HMS Core 5.0+ will receive push notifications.
-
 ---
 
 ## Analytics-only setup (`connect`)
