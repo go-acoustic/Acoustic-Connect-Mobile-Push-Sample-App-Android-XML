@@ -83,10 +83,9 @@ The app reads credentials from `SharedPreferences` at runtime, with fallback def
 Open `app/src/main/java/.../MainActivity.kt` and replace the fallback values:
 
 ```kotlin
-val appKey = prefs.getString(ConnectConstants.CLIENT_APP_ID_KEY, null)
-    ?: "YOUR_APP_KEY"          // <-- your Acoustic app key
-val collectorUrl = prefs.getString(ConnectConstants.COLLECTOR_URL_KEY, null)
-    ?: "YOUR_COLLECTOR_URL"    // <-- your collector URL
+Connect.enable(
+    appKey = "YOUR_APP_KEY",               // <-- your Acoustic app key
+    postMessageUrl = "YOUR_COLLECTOR_URL", // <-- your Acoustic collector URL
 ```
 
 **Option B — Enter credentials at runtime:**

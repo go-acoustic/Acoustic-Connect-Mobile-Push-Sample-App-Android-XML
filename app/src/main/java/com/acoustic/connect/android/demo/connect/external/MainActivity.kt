@@ -30,16 +30,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val prefs = getSharedPreferences(ConnectConstants.PREFS_NAME, MODE_PRIVATE)
-        val appKey = prefs.getString(ConnectConstants.CLIENT_APP_ID_KEY, null)
-            ?: "YOUR_APP_KEY"
-        val collectorUrl = prefs.getString(ConnectConstants.COLLECTOR_URL_KEY, null)
-            ?: "YOUR_COLLECTOR_URL"
-
         Connect.init(application)
         Connect.enable(
-            appKey = appKey,
-            postMessageUrl = collectorUrl,
+            appKey = "YOUR_APP_KEY",
+            postMessageUrl = "YOUR_COLLECTOR_URL",
             pushConfig = ConnectPushConfig(
                 application = application,
                 iconRes = R.drawable.ic_notification,
