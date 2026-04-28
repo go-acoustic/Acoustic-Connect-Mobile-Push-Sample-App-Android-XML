@@ -12,7 +12,6 @@ Use this alongside the Integration Guide to see a working implementation of push
 |---|---|
 | Push registration | Automatic provider detection (`strictProvider = null`) supporting both FCM and HMS |
 | Notification authorization | Request and display push permission status (Android 13+) |
-| SDK enable / disable | Toggle Connect SDK at runtime with custom app key and collector URL |
 | Analytics capture | Enabled by default — events, screenshots, and screen visits out of the box |
 | Identity logging | Log identity signals and view recent history (last 5 entries) |
 | Dual provider support | FCM via Firebase, HMS via Huawei AppGallery Connect |
