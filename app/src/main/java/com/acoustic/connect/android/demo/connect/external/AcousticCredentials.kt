@@ -10,6 +10,6 @@
 package com.acoustic.connect.android.demo.connect.external
 
 object AcousticCredentials {
-    const val APP_KEY = "YUOR_APP_KEY"
+    const val APP_KEY = "YOUR_APP_KEY"
     const val COLLECTOR_URL = "YOUR_COLLECTOR_URL"
 }

@@ -76,16 +76,14 @@ Place your provider config files in the `app/` directory before building:
 
 ### 4. Configure your credentials
 
-The app reads credentials from `SharedPreferences` at runtime, with fallback defaults baked into `MainActivity.kt`. To point the app at your own Acoustic environment, either:
-
 **Option A — Edit the defaults in source:**
 
 Open `app/src/main/java/.../MainActivity.kt` and replace the fallback values:
 
 ```kotlin
 Connect.enable(
-    appKey = "YOUR_APP_KEY",               // <-- your Acoustic app key
-    postMessageUrl = "YOUR_COLLECTOR_URL", // <-- your Acoustic collector URL
+    appKey = AcousticCredentials.APP_KEY,               // <-- your Acoustic app key
+    postMessageUrl = AcousticCredentials.COLLECTOR_URL, // <-- your Acoustic collector URL
 ```
 
 **Option B — Enter credentials at runtime:**

@@ -53,6 +53,7 @@ class IdentityFragment : Fragment() {
         super.onResume()
         Connect.logScreenLayout(requireActivity(), SCREEN_NAME)
         Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.LOAD)
+        viewModel.refreshSdkEnabled()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,8 +87,6 @@ class IdentityFragment : Fragment() {
                 viewModel.uiState.collect { state -> render(state) }
             }
         }
-
-        viewModel.refreshSdkEnabled()
     }
 
     private fun render(state: IdentityUiState) {
