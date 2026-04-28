@@ -11,6 +11,7 @@ package com.acoustic.connect.android.demo.connect.external
 
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
@@ -32,8 +33,8 @@ class MainActivity : AppCompatActivity() {
 
         Connect.init(application)
         Connect.enable(
-            appKey = "YOUR_APP_KEY",
-            postMessageUrl = "YOUR_COLLECTOR_URL",
+            appKey = AcousticCredentials.APP_KEY, // YOUR_APP_KEY
+            postMessageUrl = AcousticCredentials.COLLECTOR_URL, // YOUR_COLLECTOR_URL
             pushConfig = ConnectPushConfig(
                 application = application,
                 iconRes = R.drawable.ic_notification,
@@ -61,5 +62,10 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "ConnectDemo"
+    }
+
+    override fun dispatchTouchEvent(e: MotionEvent?): Boolean {
+        Connect.dispatchTouchEvent(this, e)
+        return super.dispatchTouchEvent(e)
     }
 }
