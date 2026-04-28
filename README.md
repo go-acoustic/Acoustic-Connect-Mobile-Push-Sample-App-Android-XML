@@ -75,19 +75,16 @@ Place your provider config files in the `app/` directory before building:
 
 ### 4. Configure your credentials
 
-**Option A — Edit the defaults in source:**
-
-Open `app/src/main/java/.../MainActivity.kt` and replace the fallback values:
+Open `app/src/main/java/.../AcousticCredentials.kt` and set your Acoustic app key and collector URL:
 
 ```kotlin
-Connect.enable(
-    appKey = AcousticCredentials.APP_KEY,               // <-- your Acoustic app key
-    postMessageUrl = AcousticCredentials.COLLECTOR_URL, // <-- your Acoustic collector URL
+object AcousticCredentials {
+    const val APP_KEY = "YOUR_APP_KEY"
+    const val COLLECTOR_URL = "YOUR_COLLECTOR_URL"
+}
 ```
 
-**Option B — Enter credentials at runtime:**
-
-Use the Notification screen in the running app to enter and save your app key and collector URL. Values are persisted to `SharedPreferences` and survive app restarts.
+`MainActivity.onCreate()` reads these constants directly when calling `Connect.enable(...)`.
 
 ### 5. Register SHA-256 fingerprint (HMS only)
 
@@ -115,6 +112,7 @@ Select the `app` run configuration and run on a device or emulator.
 ```
 app/src/main/
   java/.../
+    AcousticCredentials.kt            # APP_KEY and COLLECTOR_URL constants — edit before running
     MainActivity.kt                   # AppCompatActivity — SDK init, NavController, BottomNav
     notification/
       NotificationFragment.kt         # Push authorization UI
@@ -529,10 +527,14 @@ Neither `google-services.json` nor `agconnect-services.json` is needed.
 
 ### 5. Initialise the SDK without push
 
-In `MainActivity.kt`, call `Connect.enable` without a `ConnectPushConfig`:
+In `MainActivity.onCreate()`, call `Connect.init(application)` once and then `Connect.enable(...)` without a `ConnectPushConfig`:
 
 ```kotlin
-Connect.enable(application, appKey, collectorUrl)
+Connect.init(application)
+Connect.enable(
+    appKey = AcousticCredentials.APP_KEY,
+    postMessageUrl = AcousticCredentials.COLLECTOR_URL,
+)
 ```
 
 > The SDK will capture events, screen visits, and screenshots as normal — push notifications will simply not be registered or delivered.

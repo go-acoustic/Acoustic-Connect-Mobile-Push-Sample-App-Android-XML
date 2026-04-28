@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
             pushConfig = ConnectPushConfig(
                 application = application,
                 iconRes = R.drawable.ic_notification,
-                strictProvider = null,
                 onFailure = { exception ->
                     Log.e(TAG, "ConnectPush initialization failed: ${exception.message}")
                 },
