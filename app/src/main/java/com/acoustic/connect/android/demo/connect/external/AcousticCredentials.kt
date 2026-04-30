@@ -9,7 +9,24 @@
  */
 package com.acoustic.connect.android.demo.connect.external
 
+import android.content.Context
+import java.util.Properties
+
 object AcousticCredentials {
-    const val APP_KEY = "YOUR_APP_KEY"
-    const val COLLECTOR_URL = "YOUR_COLLECTOR_URL"
+    private const val CONFIG_ASSET = "ConnectBasicConfig.properties"
+    private const val KEY_APP_KEY = "AppKey"
+    private const val KEY_POST_URL = "PostMessageUrl"
+
+    var appKey: String = ""
+        private set
+    var collectorUrl: String = ""
+        private set
+
+    fun load(context: Context) {
+        val props = Properties().apply {
+            context.assets.open(CONFIG_ASSET).use { load(it) }
+        }
+        appKey = props.getProperty(KEY_APP_KEY).orEmpty()
+        collectorUrl = props.getProperty(KEY_POST_URL).orEmpty()
+    }
 }

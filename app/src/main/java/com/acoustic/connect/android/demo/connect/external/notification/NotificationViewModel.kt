@@ -14,11 +14,8 @@ import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.AndroidViewModel
 import com.acoustic.connect.android.connectmod.Connect
-import com.acoustic.connect.android.connectmod.push.ConnectPushConfig
 import com.acoustic.connect.android.connectmod.push.model.Provider
 import com.acoustic.connect.android.connectmod.push.model.Token
-import com.acoustic.connect.android.demo.connect.external.AcousticCredentials
-import com.acoustic.connect.android.demo.connect.external.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,6 +25,13 @@ class NotificationViewModel(application: Application) : AndroidViewModel(applica
 
     private val _uiState = MutableStateFlow(NotificationUiState())
     val uiState: StateFlow<NotificationUiState> = _uiState.asStateFlow()
+
+    init {
+        _uiState.update { it.copy(isNotificationAuthorized = areNotificationsPermitted()) }
+        if (Connect.isEnabled()) {
+            fetchToken()
+        }
+    }
 
     fun onNotificationPermissionResult(isGranted: Boolean) {
         Log.d(TAG, "POST_NOTIFICATIONS permission granted: $isGranted")

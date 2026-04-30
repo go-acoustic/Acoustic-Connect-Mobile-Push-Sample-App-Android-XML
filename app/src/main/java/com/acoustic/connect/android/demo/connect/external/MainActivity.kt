@@ -31,10 +31,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        AcousticCredentials.load(this)
+
         Connect.init(application)
         Connect.enable(
-            appKey = AcousticCredentials.APP_KEY, // YOUR_APP_KEY
-            postMessageUrl = AcousticCredentials.COLLECTOR_URL, // YOUR_COLLECTOR_URL
+            appKey = AcousticCredentials.appKey,
+            postMessageUrl = AcousticCredentials.collectorUrl,
             pushConfig = ConnectPushConfig(
                 application = application,
                 iconRes = R.drawable.ic_notification,

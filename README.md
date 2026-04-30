@@ -75,16 +75,50 @@ Place your provider config files in the `app/` directory before building:
 
 ### 4. Configure your credentials
 
-Open `app/src/main/java/.../AcousticCredentials.kt` and set your Acoustic app key and collector URL:
+Open `app/src/main/assets/ConnectBasicConfig.properties` and set:
+
+```properties
+# your Acoustic collector URL
+PostMessageUrl=YOUR_COLLECTOR_URL
+# your Acoustic app key
+AppKey=YOUR_APP_KEY
+```
+
+`AcousticCredentials.kt` is a thin loader — you do not need to edit it:
 
 ```kotlin
 object AcousticCredentials {
-    const val APP_KEY = "YOUR_APP_KEY"
-    const val COLLECTOR_URL = "YOUR_COLLECTOR_URL"
+    var appKey: String = ""
+        private set
+    var collectorUrl: String = ""
+        private set
+
+    fun load(context: Context) { /* reads ConnectBasicConfig.properties */ }
 }
 ```
 
-`MainActivity.onCreate()` reads these constants directly when calling `Connect.enable(...)`.
+`MainActivity.kt` (an `AppCompatActivity`) calls the loader once in `onCreate`, then hands the values to `Connect.enable(...)` so the SDK init uses `AppKey` / `PostMessageUrl`:
+
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_main)
+
+    AcousticCredentials.load(this)
+
+    Connect.init(application)
+    Connect.enable(
+        appKey = AcousticCredentials.appKey,            // from ConnectBasicConfig.properties
+        postMessageUrl = AcousticCredentials.collectorUrl, // from ConnectBasicConfig.properties
+        pushConfig = ConnectPushConfig(/* ... */),
+    )
+
+    val navHostFragment =
+        supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+    findViewById<BottomNavigationView>(R.id.bottom_nav)
+        .setupWithNavController(navHostFragment.navController)
+}
+```
 
 ### 5. Register SHA-256 fingerprint (HMS only)
 
@@ -112,7 +146,7 @@ Select the `app` run configuration and run on a device or emulator.
 ```
 app/src/main/
   java/.../
-    AcousticCredentials.kt            # APP_KEY and COLLECTOR_URL constants — edit before running
+    AcousticCredentials.kt            # Thin loader for ConnectBasicConfig.properties — no edits needed
     MainActivity.kt                   # AppCompatActivity — SDK init, NavController, BottomNav
     notification/
       NotificationFragment.kt         # Push authorization UI
@@ -530,10 +564,12 @@ Neither `google-services.json` nor `agconnect-services.json` is needed.
 In `MainActivity.onCreate()`, call `Connect.init(application)` once and then `Connect.enable(...)` without a `ConnectPushConfig`:
 
 ```kotlin
+AcousticCredentials.load(this)
+
 Connect.init(application)
 Connect.enable(
-    appKey = AcousticCredentials.APP_KEY,
-    postMessageUrl = AcousticCredentials.COLLECTOR_URL,
+    appKey = AcousticCredentials.appKey,
+    postMessageUrl = AcousticCredentials.collectorUrl,
 )
 ```
 
