@@ -27,10 +27,7 @@ class NotificationViewModel(application: Application) : AndroidViewModel(applica
     val uiState: StateFlow<NotificationUiState> = _uiState.asStateFlow()
 
     init {
-        _uiState.update { it.copy(isNotificationAuthorized = areNotificationsPermitted()) }
-        if (Connect.isEnabled()) {
-            fetchToken()
-        }
+        _uiState.update { it.copy(isNotificationAuthorized = false) }
     }
 
     fun onNotificationPermissionResult(isGranted: Boolean) {
@@ -63,7 +60,7 @@ class NotificationViewModel(application: Application) : AndroidViewModel(applica
             it.copy(
                 pushToken = tokenString,
                 pushProvider = token.provider,
-                isNotificationAuthorized = areNotificationsPermitted(),
+                isNotificationAuthorized = areNotificationsPermitted() && tokenString.isNotBlank(),
                 tokenStatus = TokenStatus.Success(tokenString),
                 notificationStatusMessage = "",
             )
@@ -91,6 +88,7 @@ class NotificationViewModel(application: Application) : AndroidViewModel(applica
                 Log.e(TAG, "Failed to get token: ${e.message}")
                 _uiState.update {
                     it.copy(
+                        isNotificationAuthorized = false,
                         tokenStatus = TokenStatus.Failure(
                             e.message ?: "Unknown error"
                         )
