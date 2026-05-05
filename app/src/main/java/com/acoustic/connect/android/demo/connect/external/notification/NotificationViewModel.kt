@@ -10,6 +10,7 @@
 package com.acoustic.connect.android.demo.connect.external.notification
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.AndroidViewModel
@@ -23,11 +24,30 @@ import kotlinx.coroutines.flow.update
 
 class NotificationViewModel(application: Application) : AndroidViewModel(application) {
 
+    private val prefs = application.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+
     private val _uiState = MutableStateFlow(NotificationUiState())
     val uiState: StateFlow<NotificationUiState> = _uiState.asStateFlow()
 
     init {
-        _uiState.update { it.copy(isNotificationAuthorized = false) }
+        refreshAuthorization()
+    }
+
+    fun refreshAuthorization() {
+        val cachedToken = prefs.getString(KEY_LAST_TOKEN, "").orEmpty()
+        val osPermitted = areNotificationsPermitted()
+        val authorized = osPermitted && cachedToken.isNotBlank()
+        _uiState.update {
+            it.copy(
+                isNotificationAuthorized = authorized,
+                pushToken = if (it.pushToken.isBlank()) cachedToken else it.pushToken,
+                tokenStatus = when {
+                    it.tokenStatus is TokenStatus.Success -> it.tokenStatus
+                    cachedToken.isNotBlank() -> TokenStatus.Success(cachedToken)
+                    else -> it.tokenStatus
+                },
+            )
+        }
     }
 
     fun onNotificationPermissionResult(isGranted: Boolean) {
@@ -41,6 +61,7 @@ class NotificationViewModel(application: Application) : AndroidViewModel(applica
                 _uiState.update { it.copy(notificationStatusMessage = "Error: failed to enable push notifications") }
             }
         } else {
+            prefs.edit().remove(KEY_LAST_TOKEN).apply()
             _uiState.update {
                 it.copy(
                     isNotificationAuthorized = false,
@@ -56,11 +77,12 @@ class NotificationViewModel(application: Application) : AndroidViewModel(applica
     fun setToken(token: Token) {
         val tokenString = token.token
         if (tokenString.isBlank()) return
+        prefs.edit().putString(KEY_LAST_TOKEN, tokenString).apply()
         _uiState.update {
             it.copy(
                 pushToken = tokenString,
                 pushProvider = token.provider,
-                isNotificationAuthorized = areNotificationsPermitted() && tokenString.isNotBlank(),
+                isNotificationAuthorized = areNotificationsPermitted(),
                 tokenStatus = TokenStatus.Success(tokenString),
                 notificationStatusMessage = "",
             )
@@ -74,9 +96,12 @@ class NotificationViewModel(application: Application) : AndroidViewModel(applica
                 val tokenString = token.token
                 val provider = token.provider
                 Log.d(TAG, "Token received: $tokenString")
+                if (tokenString.isNotBlank()) {
+                    prefs.edit().putString(KEY_LAST_TOKEN, tokenString).apply()
+                }
                 _uiState.update {
                     it.copy(
-                        isNotificationAuthorized = areNotificationsPermitted(),
+                        isNotificationAuthorized = areNotificationsPermitted() && tokenString.isNotBlank(),
                         tokenStatus = TokenStatus.Success(tokenString),
                         notificationStatusMessage = "",
                         pushToken = tokenString,
@@ -99,6 +124,8 @@ class NotificationViewModel(application: Application) : AndroidViewModel(applica
 
     companion object {
         private const val TAG = "ConnectDemo"
+        private const val PREFS_NAME = "notification_prefs"
+        private const val KEY_LAST_TOKEN = "last_push_token"
     }
 }
 

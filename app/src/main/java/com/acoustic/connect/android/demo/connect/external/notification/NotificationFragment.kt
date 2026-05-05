@@ -45,6 +45,7 @@ class NotificationFragment : Fragment() {
         super.onResume()
         Connect.logScreenLayout(requireActivity(), SCREEN_NAME)
         Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.LOAD)
+        viewModel.refreshAuthorization()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
