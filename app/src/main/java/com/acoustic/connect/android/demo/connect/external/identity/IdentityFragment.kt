@@ -103,7 +103,7 @@ class IdentityFragment : Fragment() {
 
         isUpdatingFromViewModel = false
 
-        btnSendIdentitySignal.isEnabled = state.isSdkEnabled
+        btnSendIdentitySignal.isEnabled = true
 
         val message = state.statusMessage
         if (message.isEmpty()) {

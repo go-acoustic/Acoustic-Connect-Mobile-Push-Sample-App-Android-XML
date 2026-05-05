@@ -63,6 +63,13 @@ class IdentityViewModel(application: Application) : AndroidViewModel(application
             return
         }
 
+        val isEnabled = Connect.isEnabled()
+        _uiState.update { it.copy(isSdkEnabled = isEnabled) }
+        if (!isEnabled) {
+            _uiState.update { it.copy(statusMessage = "Connect SDK is not ready yet — please try again", isSuccess = false) }
+            return
+        }
+
         val success = Connect.logIdentificationEvent(name, value)
         if (success) {
             val updated = buildUpdatedHistory(name, value)
