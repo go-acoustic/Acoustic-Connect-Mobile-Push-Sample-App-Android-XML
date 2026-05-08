@@ -79,6 +79,10 @@ class IdentityFragment : Fragment() {
         }
 
         btnSendIdentitySignal.setOnClickListener {
+            val data = HashMap<String?, String?>().apply {
+                put("identifierName", etIdentifierName.text?.toString().orEmpty())
+            }
+            Connect.logCustomEvent("IdentitySignalSent", data)
             viewModel.onLogIdentity()
         }
 
@@ -144,7 +148,10 @@ class IdentityFragment : Fragment() {
 
             itemView.findViewById<TextView>(R.id.tv_history_name).text = entry.name
             itemView.findViewById<TextView>(R.id.tv_history_value).text = entry.value
-            itemView.setOnClickListener { viewModel.onHistoryEntrySelected(entry) }
+            itemView.setOnClickListener {
+                Connect.logEvent(it, "OnHistoryItemClick")
+                viewModel.onHistoryEntrySelected(entry)
+            }
 
             llHistoryContainer.addView(itemView)
         }

@@ -58,6 +58,12 @@ class NotificationViewModel(application: Application) : AndroidViewModel(applica
                 fetchToken()
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to turn on push: ${e.message}")
+                Connect.logExceptionEvent(
+                    e.javaClass.simpleName,
+                    e.message,
+                    Log.getStackTraceString(e),
+                    false,
+                )
                 _uiState.update { it.copy(notificationStatusMessage = "Error: failed to enable push notifications") }
             }
         } else {
@@ -111,6 +117,12 @@ class NotificationViewModel(application: Application) : AndroidViewModel(applica
             }
             .addOnFailureListener { e ->
                 Log.e(TAG, "Failed to get token: ${e.message}")
+                Connect.logExceptionEvent(
+                    e.javaClass.simpleName,
+                    e.message,
+                    Log.getStackTraceString(e),
+                    false,
+                )
                 _uiState.update {
                     it.copy(
                         isNotificationAuthorized = false,

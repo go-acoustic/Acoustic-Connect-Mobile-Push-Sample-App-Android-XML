@@ -57,6 +57,7 @@ class NotificationFragment : Fragment() {
         tvStatusMessage = view.findViewById(R.id.tv_notification_status_message)
 
         btnRequestAuthorization.setOnClickListener {
+            Connect.logCustomEvent("RequestNotificationPermission")
             Connect.push.requestNotificationPermission(requireActivity())
         }
 

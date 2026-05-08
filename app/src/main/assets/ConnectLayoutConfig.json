@@ -19,13 +19,9 @@
           "smallCaseAlphabet": "x",
           "symbol": "#"
         },
-        "MaskIdList": [
-        ],
+        "MaskIdList": [],
         "MaskValueList": [],
-        "MaskAccessibilityLabelList": [
-          "sensitive_label",
-          "mask_label"
-        ]
+        "MaskAccessibilityLabelList": []
       }
     },
     "MainActivity": {
@@ -34,9 +30,9 @@
       "CaptureLayoutOn": 0,
       "CaptureScreenshotOn": 0
     },
-    "notification_screen": {
+    "NotificationFragment": {
       "ScreenChange": true,
-      "DisplayName": "Notification",
+      "DisplayName": "notification_screen",
       "CaptureLayoutOn": 2,
       "CaptureScreenshotOn": 2,
       "Masking": {
@@ -53,9 +49,9 @@
         "MaskAccessibilityLabelList": []
       }
     },
-    "identity_screen": {
+    "IdentityFragment": {
       "ScreenChange": true,
-      "DisplayName": "Identity",
+      "DisplayName": "identity_screen",
       "CaptureLayoutOn": 2,
       "CaptureScreenshotOn": 2,
       "Masking": {
@@ -67,18 +63,12 @@
           "smallCaseAlphabet": "x",
           "symbol": "#"
         },
-        "MaskIdList": [],
+        "MaskIdList": [
+          "com.acoustic.connect.android.demo.connect.external:id/et_identifier_value"
+        ],
         "MaskValueList": [],
         "MaskAccessibilityLabelList": []
       }
-    }
-  },
-  "AppendMapIds": {
-    "com.any.package:id/givenIdOnXmlLayout1": {
-      "mid": "giveAdditionalId1"
-    },
-    "com.any.package:id/givenIdOnXmlLayout2": {
-      "mid": "giveAdditionalId2"
     }
   }
 }
