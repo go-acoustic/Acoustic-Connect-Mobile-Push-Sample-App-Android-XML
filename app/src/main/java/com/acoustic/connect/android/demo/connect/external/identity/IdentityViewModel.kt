@@ -63,7 +63,7 @@ class IdentityViewModel(application: Application) : AndroidViewModel(application
             return
         }
 
-        val success = Connect.logIdentificationEvent(name, value)
+        val success = Connect.logIdentificationEvent(name, value, signalType = "pageView")
         if (success) {
             val updated = buildUpdatedHistory(name, value)
             saveHistory(updated)
