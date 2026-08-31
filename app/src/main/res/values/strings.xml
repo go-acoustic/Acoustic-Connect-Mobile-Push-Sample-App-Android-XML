@@ -15,4 +15,11 @@
     <string name="identifier_value_hint">e.g. user@example.com</string>
     <string name="send_identity_signal">Send Identity Signal</string>
     <string name="recent">Recent</string>
+    <string name="tab_gestures">Gestures</string>
+    <string name="gestures_last_none">Last gesture: none</string>
+    <string name="gestures_last">Last gesture: %1$s</string>
+    <string name="gestures_long_press">Long press me</string>
+    <string name="gestures_double_tap">Double tap me</string>
+    <string name="gestures_pinch">Pinch to zoom</string>
+    <string name="gestures_row">Scrollable row %1$d</string>
 </resources>

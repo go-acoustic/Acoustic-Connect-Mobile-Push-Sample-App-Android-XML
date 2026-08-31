@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (C) 2026 Acoustic, L.P. All rights reserved.
+
+  NOTICE: This file contains material that is confidential and proprietary to
+  Acoustic, L.P. and/or other developers. No license is granted under any
+  intellectual or industrial property rights of Acoustic, L.P. except as may
+  be provided in an agreement with Acoustic, L.P. Any unauthorized copying or
+  distribution of content from this file is prohibited.
+-->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gesture_scroll_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tv_gestures_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_gestures"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_gestures_last"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/gestures_last_none" />
+
+        <!-- Plain views on purpose: only the SDK's window-wide dispatchTouchEvent path should be
+             able to report these, so nothing here logs an event of its own. -->
+        <TextView
+            android:id="@+id/gesture_long_press"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_marginTop="16dp"
+            android:background="#F0EEFF"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="@string/gestures_long_press" />
+
+        <TextView
+            android:id="@+id/gesture_double_tap"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_marginTop="12dp"
+            android:background="#F0EEFF"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="@string/gestures_double_tap" />
+
+        <ImageView
+            android:id="@+id/gesture_pinch_zoom"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/gestures_pinch"
+            android:src="@drawable/acoustic_logo_light" />
+
+        <LinearLayout
+            android:id="@+id/gesture_row_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical" />
+
+    </LinearLayout>
+</ScrollView>

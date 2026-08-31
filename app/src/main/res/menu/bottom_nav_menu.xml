@@ -11,4 +11,9 @@
         android:icon="@drawable/ic_tab_identity"
         android:title="@string/tab_identity" />
 
+    <item
+        android:id="@+id/gesturesFragment"
+        android:icon="@drawable/ic_tab_gestures"
+        android:title="@string/tab_gestures" />
+
 </menu>

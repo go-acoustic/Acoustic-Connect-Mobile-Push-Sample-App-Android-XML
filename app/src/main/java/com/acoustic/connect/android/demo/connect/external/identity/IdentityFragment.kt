@@ -131,6 +131,12 @@ class IdentityFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        // Pairs the LOAD logged in onViewCreated, so each screen entry/exit is a matched signal pair.
+        Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.UNLOAD)
+        super.onDestroyView()
+    }
+
     companion object {
         private const val SCREEN_NAME = "identity_screen"
     }

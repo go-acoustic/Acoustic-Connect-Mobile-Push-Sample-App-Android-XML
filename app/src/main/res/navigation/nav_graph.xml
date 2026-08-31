@@ -14,4 +14,9 @@
         android:name="com.acoustic.connect.android.demo.connect.external.identity.IdentityFragment"
         android:label="Identity" />
 
+    <fragment
+        android:id="@+id/gesturesFragment"
+        android:name="com.acoustic.connect.android.demo.connect.external.gestures.GesturesFragment"
+        android:label="Gestures" />
+
 </navigation>
