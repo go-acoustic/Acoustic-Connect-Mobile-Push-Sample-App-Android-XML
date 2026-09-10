@@ -22,7 +22,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.acoustic.connect.android.connectmod.Connect
 import com.acoustic.connect.android.demo.connect.external.R
+import com.acoustic.connect.android.demo.connect.external.analytics.SignalLog
 import com.tl.uic.model.ScreenviewType
+import kotlin.math.abs
 
 /**
  * The targets are plain views with no analytics calls of their own — the SDK's window-wide
@@ -44,18 +46,29 @@ class GesturesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         Connect.logScreenLayout(requireActivity(), SCREEN_NAME)
-        Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.LOAD)
+        // Return values recorded rather than dropped: the audit needs to know whether the SDK
+        // accepted each screenview, not just that the call was made.
+        SignalLog.record(
+            "screenviewLoad",
+            SCREEN_NAME,
+            Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.LOAD),
+        )
 
         lastGestureLabel = view.findViewById(R.id.tv_gestures_last)
         populateScrollableRows(view.findViewById(R.id.gesture_row_container))
         wireLongPress(view.findViewById(R.id.gesture_long_press))
         wireDoubleTap(view.findViewById(R.id.gesture_double_tap))
+        wireSwipe(view.findViewById(R.id.gesture_swipe))
         wirePinchZoom(view.findViewById(R.id.gesture_pinch_zoom))
     }
 
     override fun onDestroyView() {
         // Pairs the LOAD above. The Compose app emits UNLOAD from onDispose; same signal pair.
-        Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.UNLOAD)
+        SignalLog.record(
+            "screenviewUnload",
+            SCREEN_NAME,
+            Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.UNLOAD),
+        )
         super.onDestroyView()
     }
 
@@ -94,6 +107,33 @@ class GesturesFragment : Fragment() {
         }
     }
 
+    /**
+     * Swipe from the travel between ACTION_DOWN and ACTION_UP.
+     *
+     * <p>A [GestureDetector] fling would only report a flick; the ticket's scope is a swipe in any
+     * of the four directions, including a slow one, so the raw delta is used instead. Threshold and
+     * direction naming match the Compose sample so the two apps' payloads line up.
+     */
+    private fun wireSwipe(target: TextView) {
+        val thresholdPx = SWIPE_THRESHOLD_DP * resources.displayMetrics.density
+        var downX = 0f
+        var downY = 0f
+        target.setOnTouchListener { _, event ->
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    downX = event.x
+                    downY = event.y
+                }
+                MotionEvent.ACTION_UP -> {
+                    swipeName(event.x - downX, event.y - downY, thresholdPx)?.let(::showGesture)
+                }
+            }
+            // As with the other targets: false so the activity's dispatchTouchEvent hook still sees
+            // the whole gesture. The view is clickable, so later events still reach this listener.
+            false
+        }
+    }
+
     private fun wirePinchZoom(target: ImageView) {
         val detector = ScaleGestureDetector(requireContext(),
             object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
@@ -120,7 +160,20 @@ class GesturesFragment : Fragment() {
         private const val SCREEN_NAME = "gestures_screen"
         private const val LIST_ROWS = 40
         private const val ROW_PADDING_PX = 24
+        /** Travel a drag must clear before it counts as a swipe rather than a sloppy tap. */
+        private const val SWIPE_THRESHOLD_DP = 48f
         private const val MIN_ZOOM = 0.5f
         private const val MAX_ZOOM = 4f
     }
+}
+
+/**
+ * Direction label for a completed drag, or null when neither axis cleared the threshold — a short
+ * drag that ends near where it began is not a swipe. The dominant axis wins, so a diagonal still
+ * reports one direction. Mirrors `swipeName` in the Compose sample.
+ */
+internal fun swipeName(travelX: Float, travelY: Float, thresholdPx: Float): String? = when {
+    abs(travelX) < thresholdPx && abs(travelY) < thresholdPx -> null
+    abs(travelX) >= abs(travelY) -> if (travelX > 0) "swipeRight" else "swipeLeft"
+    else -> if (travelY > 0) "swipeDown" else "swipeUp"
 }

@@ -59,6 +59,17 @@
             android:gravity="center"
             android:text="@string/gestures_double_tap" />
 
+        <TextView
+            android:id="@+id/gesture_swipe"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_marginTop="12dp"
+            android:background="#F0EEFF"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="@string/gestures_swipe" />
+
         <ImageView
             android:id="@+id/gesture_pinch_zoom"
             android:layout_width="120dp"
