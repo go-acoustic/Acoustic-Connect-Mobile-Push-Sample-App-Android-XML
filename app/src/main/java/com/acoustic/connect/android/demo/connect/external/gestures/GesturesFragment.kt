@@ -118,14 +118,22 @@ class GesturesFragment : Fragment() {
         val thresholdPx = SWIPE_THRESHOLD_DP * resources.displayMetrics.density
         var downX = 0f
         var downY = 0f
-        target.setOnTouchListener { _, event ->
+        target.setOnTouchListener { view, event ->
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
                     downX = event.x
                     downY = event.y
+                    // The whole screen is a ScrollView, which intercepts vertical drags: without
+                    // this the target is sent ACTION_CANCEL mid-swipe and only the horizontal
+                    // directions are ever reported. Interception is view-tree only, so the
+                    // activity's dispatchTouchEvent hook still sees every event either way.
+                    view.parent?.requestDisallowInterceptTouchEvent(true)
                 }
-                MotionEvent.ACTION_UP -> {
-                    swipeName(event.x - downX, event.y - downY, thresholdPx)?.let(::showGesture)
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    view.parent?.requestDisallowInterceptTouchEvent(false)
+                    if (event.actionMasked == MotionEvent.ACTION_UP) {
+                        swipeName(event.x - downX, event.y - downY, thresholdPx)?.let(::showGesture)
+                    }
                 }
             }
             // As with the other targets: false so the activity's dispatchTouchEvent hook still sees
