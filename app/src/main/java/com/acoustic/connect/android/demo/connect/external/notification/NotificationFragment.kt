@@ -23,6 +23,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.acoustic.connect.android.connectmod.Connect
 import com.acoustic.connect.android.demo.connect.external.R
+import com.acoustic.connect.android.demo.connect.external.analytics.SignalLog
 import com.tl.uic.model.ScreenviewType
 import kotlinx.coroutines.launch
 
@@ -44,7 +45,13 @@ class NotificationFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         Connect.logScreenLayout(requireActivity(), SCREEN_NAME)
-        Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.LOAD)
+        // Return values recorded rather than dropped: the audit needs to know whether the SDK
+        // accepted each screenview, not just that the call was made.
+        SignalLog.record(
+            "screenviewLoad",
+            SCREEN_NAME,
+            Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.LOAD),
+        )
         viewModel.refreshAuthorization()
     }
 
@@ -70,7 +77,11 @@ class NotificationFragment : Fragment() {
 
     override fun onDestroyView() {
         // Pairs the LOAD logged in onViewCreated, so each screen entry/exit is a matched signal pair.
-        Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.UNLOAD)
+        SignalLog.record(
+            "screenviewUnload",
+            SCREEN_NAME,
+            Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.UNLOAD),
+        )
         super.onDestroyView()
     }
 

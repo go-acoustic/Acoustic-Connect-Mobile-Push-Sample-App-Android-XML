@@ -23,4 +23,15 @@
     <string name="gestures_swipe">Swipe me — any direction</string>
     <string name="gestures_pinch">Pinch to zoom</string>
     <string name="gestures_row">Scrollable row %1$d</string>
+    <string name="tab_app_state">App state</string>
+    <string name="app_state_sdk_enabled">SDK enabled: %1$s</string>
+    <string name="app_state_session_id">Session id: %1$s</string>
+    <string name="app_state_logical_page">Logical page: %1$s</string>
+    <string name="app_state_start_session">Start session</string>
+    <string name="app_state_clear_log">Clear log</string>
+    <string name="app_state_signal_log_header">Signals emitted by this app (%1$d)</string>
+    <string name="app_state_signal_log_empty">None yet. Background the app, rotate it, or start a session.</string>
+    <string name="app_state_accepted">accepted</string>
+    <string name="app_state_rejected">rejected</string>
+    <string name="app_state_not_sent">not sent</string>
 </resources>

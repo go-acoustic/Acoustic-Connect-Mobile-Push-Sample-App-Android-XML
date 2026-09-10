@@ -19,4 +19,9 @@
         android:name="com.acoustic.connect.android.demo.connect.external.gestures.GesturesFragment"
         android:label="Gestures" />
 
+    <fragment
+        android:id="@+id/appStateFragment"
+        android:name="com.acoustic.connect.android.demo.connect.external.appstate.AppStateFragment"
+        android:label="App state" />
+
 </navigation>
