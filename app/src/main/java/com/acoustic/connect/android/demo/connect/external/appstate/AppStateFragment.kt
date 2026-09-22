@@ -25,14 +25,14 @@ import com.acoustic.connect.android.demo.connect.external.R
 import com.acoustic.connect.android.demo.connect.external.analytics.SignalLog
 import com.acoustic.connect.android.demo.connect.external.analytics.currentLogicalPageName
 import com.acoustic.connect.android.demo.connect.external.analytics.currentSessionId
-import com.tl.uic.model.ScreenviewType
+import com.acoustic.connect.android.connectmod.model.ConnectScreenviewType
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 /**
- * App-state readout for the CA-144239 audit — the XML counterpart of the Compose sample's
+ * App-state readout for the analytics audit — the XML counterpart of the Compose sample's
  * `AppStateScreen`.
  *
  * <p>Shows the SDK state that the app-state signals are meant to carry — session id, logical page,
@@ -60,7 +60,7 @@ class AppStateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         Connect.logScreenLayout(requireActivity(), SCREEN_NAME)
-        val accepted = Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.LOAD)
+        val accepted = Connect.logScreenview(requireActivity(), SCREEN_NAME, ConnectScreenviewType.LOAD)
         SignalLog.record("screenviewLoad", SCREEN_NAME, accepted)
 
         sdkEnabledLabel = view.findViewById(R.id.tv_sdk_enabled)
@@ -89,7 +89,7 @@ class AppStateFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        val accepted = Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.UNLOAD)
+        val accepted = Connect.logScreenview(requireActivity(), SCREEN_NAME, ConnectScreenviewType.UNLOAD)
         SignalLog.record("screenviewUnload", SCREEN_NAME, accepted)
         super.onDestroyView()
     }

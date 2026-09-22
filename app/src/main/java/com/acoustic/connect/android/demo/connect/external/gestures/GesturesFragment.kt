@@ -23,7 +23,7 @@ import androidx.fragment.app.Fragment
 import com.acoustic.connect.android.connectmod.Connect
 import com.acoustic.connect.android.demo.connect.external.R
 import com.acoustic.connect.android.demo.connect.external.analytics.SignalLog
-import com.tl.uic.model.ScreenviewType
+import com.acoustic.connect.android.connectmod.model.ConnectScreenviewType
 import kotlin.math.abs
 
 /**
@@ -51,7 +51,7 @@ class GesturesFragment : Fragment() {
         SignalLog.record(
             "screenviewLoad",
             SCREEN_NAME,
-            Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.LOAD),
+            Connect.logScreenview(requireActivity(), SCREEN_NAME, ConnectScreenviewType.LOAD),
         )
 
         lastGestureLabel = view.findViewById(R.id.tv_gestures_last)
@@ -67,7 +67,7 @@ class GesturesFragment : Fragment() {
         SignalLog.record(
             "screenviewUnload",
             SCREEN_NAME,
-            Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.UNLOAD),
+            Connect.logScreenview(requireActivity(), SCREEN_NAME, ConnectScreenviewType.UNLOAD),
         )
         super.onDestroyView()
     }
