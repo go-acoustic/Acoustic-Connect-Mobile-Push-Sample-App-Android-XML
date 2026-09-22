@@ -21,7 +21,7 @@ navigationFragmentKtxVersion = "2.7.5"
 material = "1.12.0"
 constraintlayout = "2.1.4"
 navigationUiKtx = "2.7.7"
-connectPush = "11.0.35-beta"
+connectPush = "11.0.36-beta"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
