@@ -20,7 +20,7 @@ private const val MAX_ENTRIES = 50
  * In-memory record of the analytics calls this app makes, newest first.
  *
  * <p>It exists so a lifecycle transition can be observed on the device instead of only in a
- * collector payload — the app-state signals in CA-144239 (foreground, background, orientation)
+ * collector payload — the app-state signals in the analytics audit (foreground, background, orientation)
  * are awkward to verify otherwise, because the transition that produces them also takes the app
  * off screen.
  *

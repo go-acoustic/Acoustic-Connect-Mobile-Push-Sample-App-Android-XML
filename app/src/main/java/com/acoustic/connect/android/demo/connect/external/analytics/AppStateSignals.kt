@@ -22,7 +22,7 @@ const val EVENT_APP_BACKGROUND = "appBackground"
 const val EVENT_ORIENTATION_CHANGE = "orientationChange"
 
 /**
- * Process-level app-state instrumentation for the CA-144239 signal audit.
+ * Process-level app-state instrumentation for the analytics signal audit.
  *
  * <p>Activity lifecycle is left alone. This app runs with `EnableActivityLifeCycleListener:true`,
  * so the SDK registers its own `ActivityLifecycleCallbacks` and drives `Connect.onResume`/`onPause`

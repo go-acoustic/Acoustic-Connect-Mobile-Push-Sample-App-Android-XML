@@ -22,6 +22,20 @@ Use this alongside the Integration Guide to see a working implementation of push
 
 The Connect SDK is published to Maven Central under `io.github.go-acoustic` as four separate artifacts. Pick the one that matches your push requirements — the push artifacts pull `connect` (and the matching vendor SDK) transitively, so you never need to declare `connect` yourself when using a push variant.
 
+> **Beta versions** (`<version>` ending in `-beta`) are not on Maven Central. They are served from the
+> [go-acoustic/Android_Maven](https://github.com/go-acoustic/Android_Maven) repository, which Gradle
+> reads as a plain Maven repository — add it after `mavenCentral()` in
+> `dependencyResolutionManagement.repositories` (this sample already does):
+>
+> ```kotlin
+> maven {
+>     url = uri("https://raw.githubusercontent.com/go-acoustic/Android_Maven/master")
+>     content { includeGroup("io.github.go-acoustic") }
+> }
+> ```
+>
+> Release versions resolve from Maven Central alone; the extra repository can then be removed.
+
 ```kotlin
 // No push at all — only core analytics / events
 implementation("io.github.go-acoustic:connect:<version>")

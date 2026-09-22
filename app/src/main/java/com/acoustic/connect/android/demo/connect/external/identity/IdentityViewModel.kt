@@ -11,6 +11,7 @@ package com.acoustic.connect.android.demo.connect.external.identity
 
 import android.app.Application
 import android.content.Context
+import android.util.Base64
 import androidx.lifecycle.AndroidViewModel
 import com.acoustic.connect.android.connectmod.Connect
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -100,17 +101,34 @@ class IdentityViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun saveHistory(history: List<IdentityHistoryEntry>) {
-        val serialised = history.joinToString("\n") { "${it.name}$HISTORY_SEPARATOR${it.value}" }
+        // Name and value are Base64-encoded before joining so neither can ever contain the
+        // separator itself: a plain-text join broke whenever a user typed HISTORY_SEPARATOR
+        // into either field, truncating the name and corrupting the value on the next load.
+        val serialised = history.joinToString("\n") { encodeEntry(it) }
         prefs.edit().putString(KEY_HISTORY, serialised).apply()
     }
 
     private fun loadHistory(): List<IdentityHistoryEntry> {
         val raw = prefs.getString(KEY_HISTORY, null) ?: return emptyList()
-        return raw.lines()
-            .filter { it.contains(HISTORY_SEPARATOR) }
-            .map { line ->
-                val parts = line.split(HISTORY_SEPARATOR, limit = 2)
-                IdentityHistoryEntry(parts[0], parts[1])
-            }
+        return raw.lines().mapNotNull { decodeEntry(it) }
+    }
+
+    private fun encodeEntry(entry: IdentityHistoryEntry): String {
+        val name = Base64.encodeToString(entry.name.toByteArray(Charsets.UTF_8), Base64.NO_WRAP)
+        val value = Base64.encodeToString(entry.value.toByteArray(Charsets.UTF_8), Base64.NO_WRAP)
+        return "$name$HISTORY_SEPARATOR$value"
+    }
+
+    private fun decodeEntry(line: String): IdentityHistoryEntry? {
+        val parts = line.split(HISTORY_SEPARATOR, limit = 2)
+        if (parts.size != 2) return null
+        return try {
+            val name = String(Base64.decode(parts[0], Base64.NO_WRAP), Charsets.UTF_8)
+            val value = String(Base64.decode(parts[1], Base64.NO_WRAP), Charsets.UTF_8)
+            IdentityHistoryEntry(name, value)
+        } catch (e: IllegalArgumentException) {
+            null // A pre-fix plain-text entry left over from an older install; drop it rather than
+                 // show mangled text.
+        }
     }
 }

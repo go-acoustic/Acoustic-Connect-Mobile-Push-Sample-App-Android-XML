@@ -28,7 +28,7 @@ import com.acoustic.connect.android.connectmod.Connect
 import com.acoustic.connect.android.demo.connect.external.R
 import com.acoustic.connect.android.demo.connect.external.analytics.SignalLog
 import com.google.android.material.textfield.TextInputEditText
-import com.tl.uic.model.ScreenviewType
+import com.acoustic.connect.android.connectmod.model.ConnectScreenviewType
 import kotlinx.coroutines.launch
 
 class IdentityFragment : Fragment() {
@@ -52,19 +52,25 @@ class IdentityFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Connect.logScreenLayout(requireActivity(), SCREEN_NAME)
-        // Return values recorded rather than dropped: the audit needs to know whether the SDK
-        // accepted each screenview, not just that the call was made.
-        SignalLog.record(
-            "screenviewLoad",
-            SCREEN_NAME,
-            Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.LOAD),
-        )
+        // LOAD lives in onViewCreated below, paired with the UNLOAD in onDestroyView — this
+        // fragment's view survives backgrounding, so onResume fires on every foreground return
+        // with no matching UNLOAD in between. Logging LOAD here produced repeated LOADs for a
+        // single screen visit.
         viewModel.refreshSdkEnabled()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Connect.logScreenLayout(requireActivity(), SCREEN_NAME)
+        // Return values recorded rather than dropped: the audit needs to know whether the SDK
+        // accepted each screenview, not just that the call was made. Logged once per fragment
+        // view — not per onResume — so it pairs with the UNLOAD in onDestroyView below.
+        SignalLog.record(
+            "screenviewLoad",
+            SCREEN_NAME,
+            Connect.logScreenview(requireActivity(), SCREEN_NAME, ConnectScreenviewType.LOAD),
+        )
 
         etIdentifierName = view.findViewById(R.id.et_identifier_name)
         etIdentifierValue = view.findViewById(R.id.et_identifier_value)
@@ -88,6 +94,7 @@ class IdentityFragment : Fragment() {
         btnSendIdentitySignal.setOnClickListener {
             val data = HashMap<String?, String?>().apply {
                 put("identifierName", etIdentifierName.text?.toString().orEmpty())
+                put("identifierValue", etIdentifierValue.text?.toString().orEmpty())
             }
             Connect.logCustomEvent("IdentitySignalSent", data)
             viewModel.onLogIdentity()
@@ -143,7 +150,7 @@ class IdentityFragment : Fragment() {
         SignalLog.record(
             "screenviewUnload",
             SCREEN_NAME,
-            Connect.logScreenview(requireActivity(), SCREEN_NAME, ScreenviewType.UNLOAD),
+            Connect.logScreenview(requireActivity(), SCREEN_NAME, ConnectScreenviewType.UNLOAD),
         )
         super.onDestroyView()
     }

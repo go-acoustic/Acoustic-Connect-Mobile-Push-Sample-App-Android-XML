@@ -30,6 +30,10 @@ render.experimental.xml
 # Google and Huawei Services
 google-services.json
 agconnect-services.json
+*.bak
 
 # Android Profiling
 *.hprof
+
+# macOS
+.DS_Store
